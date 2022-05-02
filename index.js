@@ -32,7 +32,7 @@ const {remove} = require('./router/remove/remove');
 const {productStruct} = require('./router/ProductStruct/ProductStruct')
 const timeout = require('connect-timeout')
 
-let port = process.env.PORT || 3002
+let port = 5001
 
 
 app.use(cors());
