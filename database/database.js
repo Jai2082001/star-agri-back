@@ -6,7 +6,7 @@ const mongoClient = mongoDb.MongoClient;
 let db;
 
 const mongoConnect = (callback) => {
-    mongoose.connect('mongodb+srv://jaideep:0Cfju2UiaDNQxcJi@cluster0.65m90.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    mongoose.connect('mongodb://localhost:27017/seedDtabase'
         , {
         useNewUrlParser: true,
         useUnifiedTopology: true

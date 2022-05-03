@@ -91,6 +91,14 @@ router.use('/orderReceivedAccepted', (req, res, next)=>{
     })
 })
 
+router.use('/orderInTransit', (req, res, next)=>{
+    console.log('order In Transit')
+    let db = getDb();
+    db.collection('orders').find({status: 'Accepted', transit: 'intransit'}).sort({ _id: -1 }).toArray().then((response) => {
+        res.send(response)
+    })
+})
+
 router.use('/orderReject', (req, res, next)=>{
     let {_id} = req.body;
     let db = getDb();
@@ -107,9 +115,32 @@ router.use('/orderDeliverySet', (req,res, next)=>{
     console.log("ORdRe Delivery")
     console.log(req.body)
     db.collection('orders').updateOne({_id: new ObjectId(req.body._id)}, {$set: {
-        transit: 'delivered'
+        transit: 'intransit',
+        service: req.headers.service,
+        coid: req.headers.id
     }}).then((response)=>{
         res.send({status: 'ok'})
+    })
+})
+router.use('/orderDelivered', (req,res, next)=>{
+    let db = getDb();
+    console.log("ORdRe Delivery")
+    console.log(req.body)
+    const currentDate = new Date()
+    const dateArray = currentDate.toLocaleDateString()
+    db.collection('orders').updateOne({_id: new ObjectId(req.body._id)}, {$set: {
+        transit: 'delivered',
+        deliveryDate: dateArray
+    }}).then((response)=>{
+        res.send({status: 'ok'})
+    })
+})
+
+router.use('/DeliverHistory',(req, res, next)=>{
+    console.log('Delivery History')
+    let db = getDb();
+    db.collection('orders').find({transit: 'delivered'}).sort({ _id: -1 }).toArray().then((response) => {
+        res.send(response)
     })
 })
 
