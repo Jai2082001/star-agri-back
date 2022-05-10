@@ -68,7 +68,7 @@ app.use(remove);
 app.get('/', (req, res, next)=>{
     console.log('here we are');
     console.log(req.cookies)
-    res.send({status: 'hello'})
+    res.send({status: 'helloLatest'})
 })
 mongoConnect(() => {
     app.listen(port, ()=>{
