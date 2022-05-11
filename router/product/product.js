@@ -193,7 +193,7 @@ router.use('/seasonalOrder', (req, res, next)=>{
 
 router.get('/productDisplayWhole', (req, res, next)=>{
     let db = getDb();
-    db.collection('cycles').find().toArray().then((response)=>{
+    db.collection('seeds').find().toArray().then((response)=>{
         res.send(response)
     })
 })

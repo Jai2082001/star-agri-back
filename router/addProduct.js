@@ -4,86 +4,36 @@ const getDb = require('../database/database').getDb;
 const { ObjectId } = require('mongodb');
 
 router.use('/addProduct', (req, res, next) => {
-        let db = getDb();
-        let { categories } = req.body; 
-        console.log(req.body)
-        let {name} = req.body;
-        const {category} = req.body;
-        console.log("add Product")
-        db.collection('seeds').find({name: name}).toArray().then((response)=>{
-                if(response.length){
-                    res.send({status: 'error'})
-                }else {
-                    
-                    const {name, price, coupon, char, spec, brand, desc, emi, overprice, images, displayimages, stock, quantity,  categories, width, lenght, height, weight, gst, hsn, level, level2, season } = req.body
-                    
-                    console.log(req.body)
+    let db = getDb();
+    let { categories } = req.body;
+    console.log(req.body)
+    let { name } = req.body;
+    const { category } = req.body;
+    console.log("add Product")
+    db.collection('seeds').find({ name: name }).toArray().then((response) => {
+        if (response.length) {
+            res.send({ status: 'error' })
+        } else {
 
-                    db.collection('seeds').insertOne({name: name, price: price, coupon: coupon, brand: brand , desc: desc, emi: emi, overprice: overprice, images: images, displayimages: displayimages, stock: stock, quantity: quantity, categories: categories, category: category, weight: weight, height: height, lenght: lenght, width: width, gst: gst, hsn: hsn, level: level, level2: level2, char: char, spec: spec, season: season }).then((response)=>{
-                        res.send({status: true})
-                        
-                })
-            }
+            const { name, price, coupon, char, spec, brand, desc, emi, overprice, images, displayimages, stock, quantity, categories, width, lenght, height, weight, gst, hsn, level, level2, season } = req.body
+
+            console.log(req.body)
+
+            db.collection('seeds').insertOne({ name: name, price: price, coupon: coupon, brand: brand, desc: desc, emi: emi, overprice: overprice, images: images, displayimages: displayimages, stock: stock, quantity: quantity, categories: categories, category: category, weight: weight, height: height, lenght: lenght, width: width, gst: gst, hsn: hsn, level: level, level2: level2, char: char, spec: spec, season: season }).then((response) => {
+                res.send({ status: true })
+
+            })
+        }
     })
 })
 
 router.use('/updateProduct', (req, res, next) => {
     let db = getDb();
-    const {product} = req.headers
-    let {name, price, overprice, desc, categories, stock, coupon, emi, quantity, category, brand, _id} = req.body;
-    let {id} = req.body;
-    if(product === 'Cycle'){
-        let {weight, suspension, rear, front, gear , wheel, userType, frame} = req.body;
-        db.collection('cycles').updateOne({_id: new ObjectId(id)}, {$set: {
-            name: name,
-            price: price,
-            overprice: overprice,
-            desc: desc,
-            categories: categories,
-            stock: stock,
-            coupon: coupon,
-            emi: emi,
-            quantity: quantity,
-            category: category,
-            brand: brand,
-            weight: weight,
-            "suspension": suspension,
-            "wheel size": wheel,
-            "rear deraileur": rear,
-            "front deraileur": front,
-            "frame material": frame,
-            "no. of gears": gear,
-            userType: userType
-        }}).then((response)=>{
-            res.send(response)
-        })
-    } else if(product === 'access'){
-        let {descPoint1, descPoint2, descPoint3, descPoint4, riderType, cycleType, forProduct} = req.body    
-        db.collection('cycles').updateOne({_id: new ObjectId(id)}, {$set: {
-            name: name,
-            price: price,
-            overprice: overprice,
-            desc: desc,
-            categories: categories,
-            stock: stock,
-            coupon: coupon,
-            emi: emi,
-            quantity: quantity,
-            category: category,
-            brand: brand,
-            descPoint1: descPoint1,
-            descPoint2: descPoint2,
-            descPoint3: descPoint3,
-            descPoint4: descPoint4,
-            riderType: riderType,
-            cycleType: cycleType,
-            forProduct: forProduct
-        }}).then((response)=>{
-            res.send(response)
-        })
-    }else{
-        let {descPoint1, descPoint2, descPoint3, descPoint4} = req.body;
-        db.collection('cycles').updateOne({_id: new ObjectId(id)}, {$set: {
+    let { name, price, overprice, desc, categories, stock, coupon, emi, quantity, category, brand,  } = req.body;
+    let { id } = req.body;
+    let { descPoint1, descPoint2, descPoint3, descPoint4 } = req.body;
+    db.collection('seeds').updateOne({ _id: new ObjectId(id) }, {
+        $set: {
             name: name,
             price: price,
             overprice: overprice,
@@ -99,14 +49,77 @@ router.use('/updateProduct', (req, res, next) => {
             category: category,
             categories: categories,
             coupon: coupon
-        }}).then((response)=>{
-            res.send(response)
-        })
-    }
-})    
-    exports.addProduct = router;
+        }
+    }).then((response) => {
+        res.send(response)
+    })
+
+})
+exports.addProduct = router;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// if(product === 'Cycle'){
+//     let {weight, suspension, rear, front, gear , wheel, userType, frame} = req.body;
+//     db.collection('cycles').updateOne({_id: new ObjectId(id)}, {$set: {
+//         name: name,
+//         price: price,
+//         overprice: overprice,
+//         desc: desc,
+//         categories: categories,
+//         stock: stock,
+//         coupon: coupon,
+//         emi: emi,
+//         quantity: quantity,
+//         category: category,
+//         brand: brand,
+//         weight: weight,
+//         "suspension": suspension,
+//         "wheel size": wheel,
+//         "rear deraileur": rear,
+//         "front deraileur": front,
+//         "frame material": frame,
+//         "no. of gears": gear,
+//         userType: userType
+//     }}).then((response)=>{
+//         res.send(response)
+//     })
+// } else if(product === 'access'){
+//     let {descPoint1, descPoint2, descPoint3, descPoint4, riderType, cycleType, forProduct} = req.body    
+//     db.collection('cycles').updateOne({_id: new ObjectId(id)}, {$set: {
+//         name: name,
+//         price: price,
+//         overprice: overprice,
+//         desc: desc,
+//         categories: categories,
+//         stock: stock,
+//         coupon: coupon,
+//         emi: emi,
+//         quantity: quantity,
+//         category: category,
+//         brand: brand,
+//         descPoint1: descPoint1,
+//         descPoint2: descPoint2,
+//         descPoint3: descPoint3,
+//         descPoint4: descPoint4,
+//         riderType: riderType,
+//         cycleType: cycleType,
+//         forProduct: forProduct
+//     }}).then((response)=>{
+//         res.send(response)
+//     })
+// }else{
 
     //db.collection('cycles').updateOne({_id: new ObjectId(id)}, {$set: {
         //     name: name,
