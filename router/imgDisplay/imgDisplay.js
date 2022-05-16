@@ -11,9 +11,7 @@ router.use('/imgDisplay', (req, res, next)=>{
 
 router.use('/imgSliderDisplay', (req, res, next)=>{
     let db = getDb();
-    console.log("image slider")
     db.collection('image').findOne({}).then((response)=>{
-        console.log(response)
         if(response){
             res.send({images: response.sliderImg})
         }

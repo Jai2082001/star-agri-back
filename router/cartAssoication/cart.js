@@ -84,8 +84,8 @@ router.use('/cartItemIncrease', (req, res, next) => {
 router.use('/cartAssociationTemp', (req, res, next)=>{
     let db = getDb()
     const {carts, userid} = req.body;
-    console.log("------------Cart Association Temp----------------");
-    console.log(carts)
+    // console.log("------------Cart Association Temp----------------");
+    // console.log(carts)
     carts.map((singleItem)=>{
         db.collection('users').findOne({ _id: new ObjectId(userid) }).then((response) => {
             let product;
@@ -96,8 +96,7 @@ router.use('/cartAssociationTemp', (req, res, next)=>{
                         break;
                     }
                     if (response.cart[i].product === singleItem.product._id) {
-                        console.log("Found Similar Product")
-                        console.log(carts)
+
                         flag++
                         product = { product: response.cart[i].product, quantity: response.cart[i].quantity + singleItem.quantity }
                         const updateObj = { $set: {} };
@@ -111,7 +110,6 @@ router.use('/cartAssociationTemp', (req, res, next)=>{
                 }
     
                 if (flag === 0) {
-                    console.log("here we are")
                     db.collection('users').updateOne({ _id: new ObjectId(userid) }, {
                         $push: {
                             cart: { product: singleItem.product._id, quantity: singleItem.quantity }
@@ -141,10 +139,8 @@ router.use('/cartAssociationTemp', (req, res, next)=>{
 
 router.use('/cartAssociation', (req, res, next) => {
     const { carts, userid, quantity } = req.body;
-    console.log("Cart Association --------------------- ")
-    console.log(carts)
+
     let db = getDb()
-    console.log(userid);
     db.collection('users').findOne({ _id: new ObjectId(userid) }).then((response) => {
         let product;
         let flag = 0;
@@ -154,13 +150,11 @@ router.use('/cartAssociation', (req, res, next) => {
                     break;
                 }
                 if (response.cart[i].product === carts._id) {
-                    console.log("Found Similar Product")
                     flag++
                     product = { product: response.cart[i].product, quantity: response.cart[i].quantity + quantity }
                     const updateObj = { $set: {} };
                     updateObj.$set['cart.' + i] = product;
                     db.collection('users').updateOne({ _id: new ObjectId(userid) }, updateObj).then((response) => {
-                        console.log(response) 
                         db.collection('users').findOne({ _id: new ObjectId(userid) }).then((response) => {
                             res.send(response.cart)
                         })
@@ -169,15 +163,12 @@ router.use('/cartAssociation', (req, res, next) => {
             }
 
             if (flag === 0) {
-                console.log("here we are")
                 db.collection('users').updateOne({ _id: new ObjectId(userid) }, {
                     $push: {
                         cart: { product: carts._id, quantity: quantity }
                     }
                 }).then((response) => {
-                    console.log(response)
                     db.collection('users').findOne({ _id: new ObjectId(userid) }).then((response) => {
-                        console.log(response)
                         res.send(response.cart)
                     })
                 })
@@ -191,7 +182,6 @@ router.use('/cartAssociation', (req, res, next) => {
                 }
             }).then((response) => {
                 db.collection('users').findOne({ _id: new ObjectId(userid) }).then((response) => {
-                    console.log(response)
                     res.send(response.cart)
                 })
             })

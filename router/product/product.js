@@ -8,10 +8,8 @@ const {ObjectId} = require("mongodb")
 router.get('/productDisplayWithId', (req, res, next)=>{
     let db = getDb();
     let {productid} = req.headers;
-    console.log("Product Display With ID ")
-    console.log(req.headers)
+
     db.collection("seeds").findOne({_id: new ObjectId(productid)}).then((response)=>{
-        console.log(response);
         res.send({product: response})
     })    
 })
@@ -19,9 +17,7 @@ router.get('/productDisplayWithId', (req, res, next)=>{
 router.get('/productDisplayWithFilter', (req, res, next)=>{
     let db = getDb();
     const {filtertype, stocktype, filter} = req.headers;
-    console.log(filtertype);
-    console.log(stocktype);
-    console.log(filter);
+
     if(filtertype !== 'undefined'){
         let stock;
         if(stocktype === 'cycles'){
@@ -41,7 +37,6 @@ router.get('/productDisplayWithFilter', (req, res, next)=>{
                 let sendingArray = [];
                 response.map((singleItem)=>{
                     let flag = 0;
-                    console.log(singleItem)
                     singleItem.userType.map((singleItem2)=>{
                         if(singleItem2.label === filter){
                             flag++
@@ -97,10 +92,8 @@ router.get('/productDisplayWithFilter', (req, res, next)=>{
 })
 
 router.use(`/productNew`, (req, res, next)=>{
-    console.log("product new");
     let db = getDb();
     db.collection("seeds").find({}).toArray().then((response)=>{
-        console.log(response);
         res.send({records: response})
     })
 })
@@ -129,16 +122,12 @@ router.use('/productDisplay', (req, res, next)=>{
 
 router.use('/categoryDisplaySeed', (req, res, next)=>{
     let db = getDb();
-    console.log("hello")
     let {name, parentname} = req.headers;
-    console.log('Category Display Seed')
-    console.log(name);
-    console.log(parentname)
+    
     if(name === 'undefined'){
         const obj = {};
         obj[`level.name`] = parentname;
         db.collection('seeds').find(obj).toArray().then((response)=>{
-            console.log(response);
             res.send(response)
         })
     }else{
@@ -146,7 +135,6 @@ router.use('/categoryDisplaySeed', (req, res, next)=>{
         obj['level.name'] = parentname;
         obj['level2.name'] = name;
         db.collection('seeds').find(obj).toArray().then((response)=>{
-            console.log(response);
             res.send(response)
         })
     }
@@ -159,7 +147,6 @@ router.use('/seasonalOrder', (req, res, next)=>{
     const date = new Date();
     const dateArray = date.toLocaleDateString().split("/")
     let season = '';
-    console.log(dateArray)
     if(parseInt(dateArray[1]) >= 1 && parseInt(dateArray[1]) <= 3){
         season = 'Summer'
     }else if(parseInt(dateArray[1]) === 4){
@@ -180,10 +167,8 @@ router.use('/seasonalOrder', (req, res, next)=>{
         season = "Rabi"
     }
     
-    console.log(season)
 
     db.collection('seeds').find({season: season}).toArray().then((response)=>{
-        console.log(response)
         res.send(response)
     })
 

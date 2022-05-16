@@ -33,7 +33,6 @@ router.use('/orderIssue', async (req, res, next) => {
         db.collection('orders').insertOne({ userid: user._id, name: user.name, email: user.email, number: user.number, cart: user.cart, address: address, status: '', amount: amount, date: newDate }).then(async (response) => {
             try {
                 response2 = await razorpay.orders.create(options)
-                console.log(response2)
                 res.json({
                     id: response2.id,
                     currency: response2.currency,

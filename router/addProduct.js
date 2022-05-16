@@ -6,10 +6,8 @@ const { ObjectId } = require('mongodb');
 router.use('/addProduct', (req, res, next) => {
     let db = getDb();
     let { categories } = req.body;
-    console.log(req.body)
     let { name } = req.body;
     const { category } = req.body;
-    console.log("add Product")
     db.collection('seeds').find({ name: name }).toArray().then((response) => {
         if (response.length) {
             res.send({ status: 'error' })
@@ -17,7 +15,6 @@ router.use('/addProduct', (req, res, next) => {
 
             const { name, price, coupon, char, spec, brand, desc, emi, overprice, images, displayimages, stock, quantity, categories, width, lenght, height, weight, gst, hsn, level, level2, season } = req.body
 
-            console.log(req.body)
 
             db.collection('seeds').insertOne({ name: name, price: price, coupon: coupon, brand: brand, desc: desc, emi: emi, overprice: overprice, images: images, displayimages: displayimages, stock: stock, quantity: quantity, categories: categories, category: category, weight: weight, height: height, lenght: lenght, width: width, gst: gst, hsn: hsn, level: level, level2: level2, char: char, spec: spec, season: season }).then((response) => {
                 res.send({ status: true })

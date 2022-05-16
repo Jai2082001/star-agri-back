@@ -80,7 +80,6 @@ router.use('/userAuthenticated', (req, res, next) => {
     // const cookie = req.cookies['jwt'];
     // const cookie2 = req.cookies;
     const cookie = req.headers.jwt;
-    console.log(cookie)
     let db = getDb();
     if(cookie && cookie !== 'undefined'){
         const myId = new ObjectId(cookie);
@@ -99,9 +98,7 @@ router.use('/userAuthenticated', (req, res, next) => {
 
 router.use('/addUserAddress', (req, res, next) => {
     const cookie = req.headers.jwt;
-    console.log(req.headers)
-    console.log('user address')
-    console.log(cookie)
+
     if (!cookie) {
         return res.send({status: 'not logged in'})      
     }    

@@ -5,7 +5,6 @@ const {ObjectId} = require('mongodb');
 
 
 router.use('/productStruct', (req, res, next)=>{
-    console.log("product structure")
     let db = getDb();
     let {productType, category} = req.body;
     let length = category.length;
@@ -27,7 +26,6 @@ router.use('/productStruct', (req, res, next)=>{
 })
 
 router.use('/addProductSeed', (req, res, next)=>{
-    console.log("here");
     let db = getDb();
     let {producttype} = req.headers;
     db.collection('category').insertOne({productType: producttype}).then((response)=>{
@@ -37,10 +35,8 @@ router.use('/addProductSeed', (req, res, next)=>{
 })
 
 router.use('/productStructSeed', (req, res, next)=>{
-    console.log("seed product")
     let db = getDb();
     let {level, level1, level2, productType} = req.body;
-    console.log(level, level1);
     
     if(level.length>0){
         let init = 0;
@@ -89,10 +85,8 @@ router.use('/productStructSeed', (req, res, next)=>{
 })
 
 router.use('/filterDesc', (req, res, next)=>{
-    console.log("Filter Description");
     let db = getDb();
     let {stocktype, filtervalue} = req.headers;
-    console.log(req.headers)
     db.collection('category').findOne({name: filtervalue, parentName: stocktype}).then((response)=>{
         console.log(response)
         res.send({array: response.filterArray})
