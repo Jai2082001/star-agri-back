@@ -29,6 +29,7 @@ router.use('/updateProduct', (req, res, next) => {
     let { name, price, overprice, desc, categories, stock, coupon, emi, quantity, category, brand,  } = req.body;
     let { id } = req.body;
     let { descPoint1, descPoint2, descPoint3, descPoint4 } = req.body;
+    console.log('update Product')
     db.collection('seeds').updateOne({ _id: new ObjectId(id) }, {
         $set: {
             name: name,

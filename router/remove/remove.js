@@ -7,7 +7,7 @@ const {ObjectId} = require('mongodb');
 router.use('/removeProduct', (req, res, next)=>{
     let db = getDb();
     let {value} = req.body;
-    db.collection('cycles').deleteOne({"_id": new ObjectId(value._id)}).then((response)=>{
+    db.collection('seeds').deleteOne({"_id": new ObjectId(value._id)}).then((response)=>{
         res.send({response: response})
     })
 })
