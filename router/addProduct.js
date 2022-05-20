@@ -24,6 +24,13 @@ router.use('/addProduct', (req, res, next) => {
     })
 })
 
+router.use('/productDisplayWholeSeeds', (req,res, next)=>{
+    let db = getDb();
+    db.collection('seeds').find({}).toArray().then((response)=>{
+        res.send(response);
+    })
+})
+
 router.use('/updateProduct', (req, res, next) => {
     let db = getDb();
     let { name, price, overprice, desc, categories, stock, coupon, emi, quantity, category, brand,  } = req.body;
@@ -51,7 +58,35 @@ router.use('/updateProduct', (req, res, next) => {
     }).then((response) => {
         res.send(response)
     })
+})
 
+router.use('/updatePrimaryImage', (req, res, next)=>{
+    let db = getDb();
+    let {img, product} = req.body;
+    console.log(req.body.img)
+    db.collection('seeds').updateOne({_id: new ObjectId(product._id)}, {
+        $set: {
+            displayimages: img    
+        }
+    }).then((response)=>{
+        console.log(response)
+        res.send(response)
+    })
+})
+
+
+router.use('/updateSecImage', (req, res, next)=>{
+    let db = getDb();
+    let {img, product} = req.body;
+    console.log(req.body.img);
+    db.collection('seeds').updateOne({_id: new ObjectId(product._id)}, {
+        $set: {
+            images: img
+        }
+    }).then((response)=>{
+        console.log(response)
+        res.send(response)
+    })
 })
 exports.addProduct = router;
 
