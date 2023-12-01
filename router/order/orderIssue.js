@@ -53,6 +53,25 @@ router.use('/orderIssue', async (req, res, next) => {
     })
 })
 
+router.use('/orderCash', (req, res, next)=>{
+    const newDate = new Date().toLocaleDateString();
+    let db = getDb();
+    console.log(req.body);
+    console.log("adad")
+    const { userid, address, amount } = req.headers;
+    db.collection('users').findOne({ _id: new ObjectId(userid) }).then(async (user) => {
+        db.collection('orders').insertOne({ userid: user._id, name: user.name, email: user.email, number: user.number, cart: user.cart, address: address, status: '', amount: amount, date: newDate, paymentid: "cashondelivery" }).then((response) => {
+            db.collection('users').updateOne({ _id: new ObjectId(user._id) }, {
+                $set: {
+                    cart: []
+                }
+            }).then(async (response) => {
+                res.send(response)
+            })
+        })
+    })  
+})
+
 router.use('/orderPaymentDone', (req, res, next) => {
     const { order, payment, signature } = req.headers
     const newDate = new Date().toLocaleDateString();

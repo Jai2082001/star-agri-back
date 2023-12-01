@@ -6,7 +6,8 @@ const { ObjectId } = require('mongodb');
 
 router.use('/registerUserSignUp', (req, res, next) => {
     let db = getDb();
-    const {name, email, number, password} = req.headers
+    console.log(req.body)
+    const {name, email, number, password, state, city, address, alternatenum, pincode} = req.body
     db.collection('users').findOne({email: email}).then((response)=>{
         if(response){
             res.send({status: "Email already in use"})
@@ -15,8 +16,24 @@ router.use('/registerUserSignUp', (req, res, next) => {
                 if(response){
                     res.send({status: "Phone Number already in use"})
                 }else{
+                    
                     db.collection('users').insertOne({ name: name, email: email, number: number, password: password }).then((response) => {
-                        res.send({status: 'insertedUser'})
+                        
+                        // console.log(response.insertedId);
+                        // db.collection('users').findOne({_id: response.insertedId}).then((response)=>{
+                        //     console.log(response)
+                        // })
+                        db.collection('address').insertOne({fullname: name, number: number, state: state, city: city, address: address, alternatenum: null, pincode: pincode}).then((response1)=>{
+                            db.collection('users').updateOne({_id: response.insertedId}, {
+                                $push: {
+                                    address: response1.insertedId
+                                }
+                            }).then((response)=>{
+                                console.log(response)
+                                res.send({status: 'insertedUser'})
+                            })
+                        })
+
                     })
                 }
             })
